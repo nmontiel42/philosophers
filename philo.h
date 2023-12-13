@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/12 16:33:08 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:33:07 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_data
 }				t_data;
 
 //activities.c
-void		print_message(char *str, t_philo *philo, int id);
+void		print_message(char *str, t_philo *philo);
+int			ft_strcmp(char *s1, char *s2);
 void		think(t_philo *philo);
 void		sleep_philo(t_philo *philo);
 void		eat(t_philo *philo);
@@ -75,12 +76,12 @@ int			initialize(t_data *data, char **argv, int argc);
 void		*philo_routine(void *arg);
 void		*monitor(void *pointer);
 int			main(int argc, char **argv);
-void		destroy_resources(t_data *data);
+int			initialize_threads(t_data *data);
 
 //monitor.c
 bool		philosopher_dead(t_philo *philo);
 bool		philosopher_finished(t_philo *philo);
-bool		all_philosophers_finished(t_data *data);
+//bool		all_philosophers_finished(t_data *data);
 
 //utils_philo.c
 int			ft_error(char *str, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/12 16:32:43 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:33:48 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,27 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	philo->die_time = philo->data->dead_time + get_time();
+	while (philo->data->dead == 0)
 	{
-		if (philosopher_dead(philo))
+		pthread_mutex_lock(&philo->lock);
+		if (get_time() >= philo->die_time && philo->eating == 0)
 		{
-			print_message("died", philo, philo->id);
+			print_message("died", philo);
+			pthread_mutex_unlock(&philo->lock);
 			break ;
 		}
-		if (philosopher_finished(philo))
-			break ;
+		if (philo->times_eat == philo->data->num_meals)
+		{
+			pthread_mutex_lock(&philo->data->lock);
+			philo->data->finished++;
+			pthread_mutex_unlock(&philo->data->lock);
+		}
+		pthread_mutex_unlock(&philo->lock);
 		think(philo);
 		eat(philo);
-		sleep_philo(philo);
 	}
-	return (NULL);
+	return ((void *)0);
 }
 
 void	*monitor(void *pointer)
@@ -40,13 +47,14 @@ void	*monitor(void *pointer)
 	data = (t_data *)pointer;
 	while (1)
 	{
-		if (all_philosophers_finished(data))
+		pthread_mutex_lock(&data->lock);
+		if (data->finished >= data->num_philos)
 		{
-			pthread_mutex_lock(&data->lock);
-			data->finished = 1;
+			data->dead = 1;
 			pthread_mutex_unlock(&data->lock);
 			break ;
 		}
+		pthread_mutex_unlock(&data->lock);
 	}
 	return (pointer);
 }
@@ -62,36 +70,43 @@ int	main(int argc, char **argv)
 		return (1);
 	if (initialize(&data, argv, argc))
 		return (1);
-	if (data.num_meals != -1)
-	{
-		pthread_create(&monitor_thread, NULL, monitor, (void *)&data);
-		pthread_detach(monitor_thread);
-	}
-	i = 0;
-	while (i < data.num_philos)
-	{
-		pthread_create(&philo_threads[i], NULL, philo_routine,
-			(void *)&data.philos[i]);
-		i++;
-	}
-	if (data.num_meals != -1)
-		pthread_cancel(monitor_thread);
-	destroy_resources(&data);
+	if (initialize_threads(&data))
+		return (1);
+	ft_destroy(&data);
 	return (0);
 }
 
-void	destroy_resources(t_data *data)
+int	initialize_threads(t_data *data)
 {
-	int	i;
+	pthread_t	monitor_thread;
+	int			i;
 
+	data->start_time = get_time();
+	if (data->num_meals > 0)
+	{
+		if (pthread_create(&monitor_thread, NULL, &monitor, &data->philos[0]))
+			return (ft_printf("Error creando el hilo monitor"));
+	}
 	i = 0;
 	while (i < data->num_philos)
 	{
-		pthread_mutex_destroy(&data->philos[i].lock);
+		if (pthread_create(&data->tid[i], NULL,
+				&philo_routine, &data->philos[i]))
+			return (ft_printf("Error crando el hilo"));
+		ft_usleep(1);
 		i++;
 	}
-	if (data->num_meals != -1)
-		pthread_mutex_destroy(&data->write);
-	pthread_mutex_destroy(&data->lock);
-	free(data->philos);
+	i = 0;
+	while (i < data->num_philos)
+	{
+		if (pthread_join(data->tid[i], NULL))
+			return (ft_printf("Error al esperar al hilo"));
+		i++;
+	}
+	if (data->num_meals > 0)
+	{
+		if (pthread_cancel(monitor_thread))
+			return (ft_printf("Error al cancelar el monitor"));
+	}
+	return (0);
 }

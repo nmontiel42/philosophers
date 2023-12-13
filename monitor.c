@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:34:06 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/12 15:56:13 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/13 13:05:50 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,26 @@
 bool	philosopher_dead(t_philo *philo)
 {
 	u_int64_t	current_time;
+	bool		is_dead;
 
 	pthread_mutex_lock(&philo->lock);
 	current_time = get_time();
-	if (current_time >= philo->die_time)
-	{
-		pthread_mutex_unlock(&philo->lock);
-		return (true);
-	}
+	is_dead = (current_time >= philo->die_time);
 	pthread_mutex_unlock(&philo->lock);
-	return (false);
+	return (is_dead);
 }
 
 bool	philosopher_finished(t_philo *philo)
 {
+	bool	is_finished;
+
 	pthread_mutex_lock(&philo->lock);
-	if (philo->times_eat >= philo->data->num_meals)
-	{
-		pthread_mutex_unlock(&philo->lock);
-		return (true);
-	}
+	is_finished = (philo->times_eat >= philo->data->num_meals);
 	pthread_mutex_unlock(&philo->lock);
-	return (false);
+	return (is_finished);
 }
 
-bool	all_philosophers_finished(t_data *data)
+/*bool	all_philosophers_finished(t_data *data)
 {
 	int	i;
 
@@ -56,4 +51,4 @@ bool	all_philosophers_finished(t_data *data)
 		i++;
 	}
 	return (true);
-}
+}*/
