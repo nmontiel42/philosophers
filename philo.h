@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/13 14:33:07 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:34:27 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 typedef struct s_philo
 {
 	struct s_data	*data;
-	pthread_t		t1;
+	pthread_t		supervisor;
 	int				id;
 	int				times_eat;
 	int				status;
@@ -73,13 +73,14 @@ int			initialize_data(t_data *data, char **argv, int argc);
 int			initialize(t_data *data, char **argv, int argc);
 
 //main.c
+void		*supervisor(void *philo_pointer);
 void		*philo_routine(void *arg);
 void		*monitor(void *pointer);
 int			main(int argc, char **argv);
 int			initialize_threads(t_data *data);
 
 //monitor.c
-bool		philosopher_dead(t_philo *philo);
+int			check_all_philos_finished(t_data *data);
 bool		philosopher_finished(t_philo *philo);
 //bool		all_philosophers_finished(t_data *data);
 

@@ -6,22 +6,23 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/13 14:33:48 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:34:49 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*philo_routine(void *arg)
+void	*supervisor(void *philo_pointer)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	u_int64_t	current_time;
 
-	philo = (t_philo *)arg;
-	philo->die_time = philo->data->dead_time + get_time();
+	philo = (t_philo *)philo_pointer;
 	while (philo->data->dead == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
-		if (get_time() >= philo->die_time && philo->eating == 0)
+		current_time = get_time();
+		if ((current_time - philo->data->start_time) >= philo->data->dead_time)
 		{
 			print_message("died", philo);
 			pthread_mutex_unlock(&philo->lock);
@@ -34,10 +35,27 @@ void	*philo_routine(void *arg)
 			pthread_mutex_unlock(&philo->data->lock);
 		}
 		pthread_mutex_unlock(&philo->lock);
-		think(philo);
-		eat(philo);
+		ft_usleep(1);
 	}
-	return ((void *)0);
+	return ((void *) 0);
+}
+
+void	*philo_routine(void *arg)
+{
+	t_philo		*philo;
+
+	philo = (t_philo *)arg;
+	if (pthread_create(&philo->supervisor, NULL, &supervisor, philo))
+		return ((void *)1);
+	while (philo->data->dead == 0)
+	{
+		eat(philo);
+		sleep_philo(philo);
+		think(philo);
+	}
+	if (pthread_join(philo->supervisor, NULL))
+		return ((void *)1);
+	return ((void *) 0);
 }
 
 void	*monitor(void *pointer)
@@ -48,7 +66,7 @@ void	*monitor(void *pointer)
 	while (1)
 	{
 		pthread_mutex_lock(&data->lock);
-		if (data->finished >= data->num_philos)
+		if (check_all_philos_finished(data))
 		{
 			data->dead = 1;
 			pthread_mutex_unlock(&data->lock);
