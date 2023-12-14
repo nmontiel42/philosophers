@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/13 15:34:49 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:14:54 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*supervisor(void *philo_pointer)
 	{
 		pthread_mutex_lock(&philo->lock);
 		current_time = get_time();
-		if ((current_time - philo->data->start_time) >= philo->data->dead_time)
+		if (current_time >= philo->die_time && philo->eating == 0)
 		{
 			print_message("died", philo);
 			pthread_mutex_unlock(&philo->lock);
@@ -43,8 +43,10 @@ void	*supervisor(void *philo_pointer)
 void	*philo_routine(void *arg)
 {
 	t_philo		*philo;
+	int			has_eaten_enough;
 
 	philo = (t_philo *)arg;
+	philo->die_time = philo->data->dead_time + get_time();
 	if (pthread_create(&philo->supervisor, NULL, &supervisor, philo))
 		return ((void *)1);
 	while (philo->data->dead == 0)
@@ -60,21 +62,17 @@ void	*philo_routine(void *arg)
 
 void	*monitor(void *pointer)
 {
-	t_data	*data;
+	t_philo	*philo;
 
-	data = (t_data *)pointer;
-	while (1)
+	philo = (t_philo *) pointer;
+	while (philo->data->dead == 0)
 	{
-		pthread_mutex_lock(&data->lock);
-		if (check_all_philos_finished(data))
-		{
-			data->dead = 1;
-			pthread_mutex_unlock(&data->lock);
-			break ;
-		}
-		pthread_mutex_unlock(&data->lock);
+		pthread_mutex_lock(&philo->lock);
+		if (philo->data->finished >= philo->data->num_philos)
+			philo->data->dead = 1;
+		pthread_mutex_unlock(&philo->lock);
 	}
-	return (pointer);
+	return ((void *)0);
 }
 
 int	main(int argc, char **argv)
@@ -108,8 +106,8 @@ int	initialize_threads(t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		if (pthread_create(&data->tid[i], NULL,
-				&philo_routine, &data->philos[i]))
+		if (pthread_create(&data->tid[i], NULL, &philo_routine,
+				&data->philos[i]))
 			return (ft_printf("Error crando el hilo"));
 		ft_usleep(1);
 		i++;
