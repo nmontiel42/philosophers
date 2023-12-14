@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 15:21:33 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:27:33 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ void	*monitor(void *pointer)
 	return ((void *)0);
 }
 
+/*void	ft_leaks(void)
+{
+	system("leaks -q philo");
+}*/
+
 int	main(int argc, char **argv)
 {
 	t_data		data;
@@ -85,6 +90,7 @@ int	main(int argc, char **argv)
 	pthread_t	philo_threads[MAX_PHILOS];
 	int			i;
 
+	//atexit(ft_leaks);
 	if (!validate_input(argc, argv))
 		return (1);
 	if (initialize(&data, argv, argc))
