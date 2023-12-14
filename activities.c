@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:29:33 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 14:14:58 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:19:46 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,6 @@ int	ft_strcmp(char *s1, char *s2)
 		s2++;
 	}
 	return (*(char *)s1 - *(char *)s2);
-}
-
-void	think(t_philo *philo)
-{
-	print_message("is thinking", philo);
 }
 
 void	sleep_philo(t_philo *philo)

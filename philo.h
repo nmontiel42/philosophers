@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/13 15:34:27 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:08:25 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_data
 //activities.c
 void		print_message(char *str, t_philo *philo);
 int			ft_strcmp(char *s1, char *s2);
-void		think(t_philo *philo);
 void		sleep_philo(t_philo *philo);
 void		eat(t_philo *philo);
 

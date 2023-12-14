@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 14:14:54 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:21:33 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,26 @@
 void	*supervisor(void *philo_pointer)
 {
 	t_philo		*philo;
-	u_int64_t	current_time;
 
 	philo = (t_philo *)philo_pointer;
 	while (philo->data->dead == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
-		current_time = get_time();
-		if (current_time >= philo->die_time && philo->eating == 0)
+		if (get_time() >= philo->die_time && philo->eating == 0)
 		{
 			print_message("died", philo);
 			pthread_mutex_unlock(&philo->lock);
 			break ;
 		}
-		if (philo->times_eat == philo->data->num_meals)
+		pthread_mutex_unlock(&philo->lock);
+		if (philo->data->num_meals > 0 && philo->times_eat
+			>= philo->data->num_meals)
 		{
 			pthread_mutex_lock(&philo->data->lock);
 			philo->data->finished++;
 			pthread_mutex_unlock(&philo->data->lock);
+			break ;
 		}
-		pthread_mutex_unlock(&philo->lock);
 		ft_usleep(1);
 	}
 	return ((void *) 0);
@@ -52,8 +52,11 @@ void	*philo_routine(void *arg)
 	while (philo->data->dead == 0)
 	{
 		eat(philo);
+		print_message("is thinking", philo);
 		sleep_philo(philo);
-		think(philo);
+		if (philo->data->num_meals > 0 && philo->times_eat
+			>= philo->data->num_meals)
+			break ;
 	}
 	if (pthread_join(philo->supervisor, NULL))
 		return ((void *)1);
@@ -121,7 +124,7 @@ int	initialize_threads(t_data *data)
 	}
 	if (data->num_meals > 0)
 	{
-		if (pthread_cancel(monitor_thread))
+		if (pthread_join(monitor_thread, NULL))
 			return (ft_printf("Error al cancelar el monitor"));
 	}
 	return (0);

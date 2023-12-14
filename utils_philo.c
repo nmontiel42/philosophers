@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:49:03 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 12:40:18 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:33:15 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ int	ft_usleep(useconds_t time)
 
 	start = get_time();
 	while ((get_time() - start) < time)
-		usleep(time / 10);
+		usleep(50);
 	return (0);
 }
