@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 16:12:36 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 16:20:36 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,21 @@ int	initialize_threads(t_data *data)
 	if (data->num_meals > 0)
 	{
 		if (pthread_create(&monitor_thread, NULL, &monitor, &data->philos[0]))
-			return (ft_printf("Error creando el hilo monitor"));
+			return (ft_printf("Error creating monitor thread"));
 	}
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_create(&data->tid[i], NULL, &philo_routine,
 				&data->philos[i]))
-			return (ft_printf("Error crando el hilo"));
+			return (ft_printf("Error creating thread"));
 		ft_usleep(1);
 	}
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(data->tid[i], NULL))
-			return (ft_printf("Error al esperar al hilo"));
+			return (ft_printf("Error waiting for thread"));
 	}
 	return (0);
 }
