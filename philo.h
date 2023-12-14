@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 15:08:25 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 16:06:25 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,13 @@ int			initialize(t_data *data, char **argv, int argc);
 //main.c
 void		*supervisor(void *philo_pointer);
 void		*philo_routine(void *arg);
-void		*monitor(void *pointer);
 int			main(int argc, char **argv);
 int			initialize_threads(t_data *data);
 
 //monitor.c
 int			check_all_philos_finished(t_data *data);
 bool		philosopher_finished(t_philo *philo);
-//bool		all_philosophers_finished(t_data *data);
+void		*monitor(void *pointer);
 
 //utils_philo.c
 int			ft_error(char *str, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 15:27:33 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/14 16:12:36 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,6 @@ void	*philo_routine(void *arg)
 	return ((void *) 0);
 }
 
-void	*monitor(void *pointer)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *) pointer;
-	while (philo->data->dead == 0)
-	{
-		pthread_mutex_lock(&philo->lock);
-		if (philo->data->finished >= philo->data->num_philos)
-			philo->data->dead = 1;
-		pthread_mutex_unlock(&philo->lock);
-	}
-	return ((void *)0);
-}
-
 /*void	ft_leaks(void)
 {
 	system("leaks -q philo");
@@ -112,26 +97,19 @@ int	initialize_threads(t_data *data)
 		if (pthread_create(&monitor_thread, NULL, &monitor, &data->philos[0]))
 			return (ft_printf("Error creando el hilo monitor"));
 	}
-	i = 0;
-	while (i < data->num_philos)
+	i = -1;
+	while (++i < data->num_philos)
 	{
 		if (pthread_create(&data->tid[i], NULL, &philo_routine,
 				&data->philos[i]))
 			return (ft_printf("Error crando el hilo"));
 		ft_usleep(1);
-		i++;
 	}
-	i = 0;
-	while (i < data->num_philos)
+	i = -1;
+	while (++i < data->num_philos)
 	{
 		if (pthread_join(data->tid[i], NULL))
 			return (ft_printf("Error al esperar al hilo"));
-		i++;
-	}
-	if (data->num_meals > 0)
-	{
-		if (pthread_join(monitor_thread, NULL))
-			return (ft_printf("Error al cancelar el monitor"));
 	}
 	return (0);
 }
