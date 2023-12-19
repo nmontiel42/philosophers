@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 16:06:25 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/19 11:13:35 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ typedef struct s_data
 	pthread_mutex_t	write;
 }				t_data;
 
+//-fsanitize=thread -g3
+
 //activities.c
 void		print_message(char *str, t_philo *philo);
 int			ft_strcmp(char *s1, char *s2);
@@ -75,12 +77,16 @@ int			initialize(t_data *data, char **argv, int argc);
 void		*supervisor(void *philo_pointer);
 void		*philo_routine(void *arg);
 int			main(int argc, char **argv);
-int			initialize_threads(t_data *data);
 
 //monitor.c
 int			check_all_philos_finished(t_data *data);
 bool		philosopher_finished(t_philo *philo);
 void		*monitor(void *pointer);
+
+//threads.c
+int			create_threads(t_data *data, pthread_t *monitor_thread);
+int			wait_for_threads(t_data *data, pthread_t monitor_thread);
+int			initialize_threads(t_data *data);
 
 //utils_philo.c
 int			ft_error(char *str, t_data *data);
@@ -88,6 +94,5 @@ void		ft_destroy(t_data *data);
 void		ft_free(t_data *data);
 u_int64_t	get_time(void);
 int			ft_usleep(useconds_t time);
-
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/14 16:20:36 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/19 11:13:58 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	main(int argc, char **argv)
 	pthread_t	philo_threads[MAX_PHILOS];
 	int			i;
 
-	//atexit(ft_leaks);
 	if (!validate_input(argc, argv))
 		return (1);
 	if (initialize(&data, argv, argc))
@@ -83,33 +82,5 @@ int	main(int argc, char **argv)
 	if (initialize_threads(&data))
 		return (1);
 	ft_destroy(&data);
-	return (0);
-}
-
-int	initialize_threads(t_data *data)
-{
-	pthread_t	monitor_thread;
-	int			i;
-
-	data->start_time = get_time();
-	if (data->num_meals > 0)
-	{
-		if (pthread_create(&monitor_thread, NULL, &monitor, &data->philos[0]))
-			return (ft_printf("Error creating monitor thread"));
-	}
-	i = -1;
-	while (++i < data->num_philos)
-	{
-		if (pthread_create(&data->tid[i], NULL, &philo_routine,
-				&data->philos[i]))
-			return (ft_printf("Error creating thread"));
-		ft_usleep(1);
-	}
-	i = -1;
-	while (++i < data->num_philos)
-	{
-		if (pthread_join(data->tid[i], NULL))
-			return (ft_printf("Error waiting for thread"));
-	}
 	return (0);
 }
