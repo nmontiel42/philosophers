@@ -10,34 +10,22 @@ SRCS = activities.c\
 
 OBJS	= ${SRCS:.c=.o}
 
-LIBFT = ./libft
-LIBPF = ./printf
-
 HEADERS = -I ./includes
-LIBS	= ${LIBFT}/libft.a ${LIBPF}/libftprintf.a
 
 FLAGS	= -g -Wall -Wextra -Werror
 
 RM		= rm -f
 
-all: libs ${NAME}
-
-libs:
-	@${MAKE} -C ${LIBFT}
-	@${MAKE} -C ${LIBPF}
+all: ${NAME}
 
 ${NAME}: ${OBJS}
-	@${CC} ${FLAGS} ${OBJS} ${LIBS} ${HEADERS} -o ${NAME}
+	@${CC} ${FLAGS} ${OBJS} ${HEADERS} -o ${NAME}
 
 clean:
 	@${RM} ${OBJS}
-	@${MAKE} -C ${LIBFT} clean
-	@${MAKE} -C ${LIBPF} clean
 
 fclean: clean
 	@${RM} ${NAME}
-	@${MAKE} -C ${LIBFT} fclean
-	@${MAKE} -C ${LIBPF} fclean
 
 re: fclean all
 

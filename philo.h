@@ -6,20 +6,19 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:09:11 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/19 11:13:35 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/19 11:29:33 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include "libft/libft.h"
-# include "printf/ft_printf.h"
-# include <pthread.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/time.h>
 # include <stdbool.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 # define MAX_PHILOS 200
 
@@ -63,6 +62,8 @@ void		sleep_philo(t_philo *philo);
 void		eat(t_philo *philo);
 
 //check_input.c
+long long	ft_atoi(const char *str);
+int			ft_isdigit(int c);
 int			is_number(char *str);
 int			validate_input(int argc, char **argv);
 
@@ -93,6 +94,6 @@ int			ft_error(char *str, t_data *data);
 void		ft_destroy(t_data *data);
 void		ft_free(t_data *data);
 u_int64_t	get_time(void);
-int			ft_usleep(useconds_t time);
+int			ft_usleep(suseconds_t time);
 
 #endif
