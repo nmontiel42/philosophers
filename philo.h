@@ -63,7 +63,6 @@ void		eat(t_philo *philo);
 
 //check_input.c
 long long	ft_atoi(const char *str);
-int			ft_isdigit(int c);
 int			is_number(char *str);
 int			validate_input(int argc, char **argv);
 
