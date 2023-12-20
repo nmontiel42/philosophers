@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 13:05:28 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/19 11:13:58 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/20 11:51:48 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	philo->die_time = philo->data->dead_time + get_time();
-	if (pthread_create(&philo->supervisor, NULL, &supervisor, philo))
+	if (pthread_create(&philo->supervisor, NULL, &supervisor, (void *)philo))
 		return ((void *)1);
 	while (philo->data->dead == 0)
 	{
@@ -62,7 +62,6 @@ void	*philo_routine(void *arg)
 		return ((void *)1);
 	return ((void *) 0);
 }
-
 /*void	ft_leaks(void)
 {
 	system("leaks -q philo");

@@ -6,7 +6,7 @@
 /*   By: nmontiel <montielarce9@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:53:35 by nmontiel          #+#    #+#             */
-/*   Updated: 2023/12/19 11:28:14 by nmontiel         ###   ########.fr       */
+/*   Updated: 2023/12/20 11:54:39 by nmontiel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	validate_input(int argc, char **argv)
 				MAX_PHILOS), 0);
 	if (is_number(argv[2]) || ft_atoi(argv[2]) < 60)
 		return (printf("Error: Invalid death time\n"), 0);
-	if (is_number(argv[3]) || ft_atoi(argv[3]) <= 0)
+	if (is_number(argv[3]) || ft_atoi(argv[3]) < 60)
 		return (printf("Error: Invalid eating time\n"), 0);
 	if (is_number(argv[4]) || ft_atoi(argv[4]) < 60)
 		return (printf("Error: Invalid sleeping time\n"), 0);
