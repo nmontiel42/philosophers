@@ -1,5 +1,6 @@
-<p align:"center">
-<img src:"https://media1.tenor.com/m/3h6HKwfxn1MAAAAC/aesthetic-discord.gif"></p>
+<p>
+<img src:"https://media1.tenor.com/m/3h6HKwfxn1MAAAAC/aesthetic-discord.gif"/>
+</p>
 
 # Description:
 <p>
