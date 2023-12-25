@@ -1,5 +1,5 @@
 <p>
-  <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Ftenor.com%2Fview%2Faesthetic-discord-header-gif-26473588&psig=AOvVaw1C-NJSVDDiz7Py77qqUNhJ&ust=1703632429240000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCOCLr8Hbq4MDFQAAAAAdAAAAABAD"/>
+  <img src="https://media1.tenor.com/m/3h6HKwfxn1MAAAAC/aesthetic-discord.gif"/>
 </p>
 
 # Description:
